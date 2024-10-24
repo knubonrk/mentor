@@ -35,6 +35,8 @@ repositories {
 dependencies {
     implementation("io.ktor:ktor-server-core-jvm")
     implementation("io.ktor:ktor-server-sse-jvm")
+    implementation("io.ktor:ktor-server-cors-jvm:3.0.0")
+    implementation("io.ktor:ktor-server-websockets:3.0.0")
     implementation("io.ktor:ktor-server-content-negotiation-jvm")
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm")
     implementation("io.ktor:ktor-server-auth-jvm")

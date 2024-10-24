@@ -1,5 +1,6 @@
 package no.nrk.mentoring
 
+import installCORS
 import io.ktor.server.application.*
 import no.nrk.mentoring.plugins.configureRouting
 import no.nrk.mentoring.plugins.configureSecurity
@@ -10,6 +11,7 @@ fun main(args: Array<String>) {
 }
 
 fun Application.module() {
+    installCORS()
     configureSerialization()
     configureSecurity()
     configureRouting()
