@@ -37,8 +37,6 @@ dependencies {
     implementation("io.ktor:ktor-server-sse-jvm")
     implementation("io.ktor:ktor-server-content-negotiation-jvm")
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm")
-    implementation("io.ktor:ktor-server-webjars-jvm")
-    implementation("org.webjars:jquery:3.7.1")
     implementation("io.ktor:ktor-server-auth-jvm")
     implementation("io.ktor:ktor-server-netty-jvm")
     implementation("ch.qos.logback:logback-classic:1.5.6")
