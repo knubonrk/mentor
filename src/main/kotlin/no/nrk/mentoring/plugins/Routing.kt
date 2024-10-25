@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import no.nrk.mentoring.fetchCode
 import kotlin.time.Duration.Companion.seconds
 
 fun Application.configureRouting() {
@@ -38,7 +39,11 @@ fun Application.configureRouting() {
         webSocket("/stream") { // WebSocket route
             val job = launch {
                 currentPageFlow.collect { page ->
-                    send(Text(Json.encodeToString(mapOf("current_page" to page))))
+                    if (page == "code") {
+                        send(Text(Json.encodeToString(mapOf("current_page" to page) + fetchCode())))
+                    } else {
+                        send(Text(Json.encodeToString(mapOf("current_page" to page))))
+                    }
                 }
             }
 

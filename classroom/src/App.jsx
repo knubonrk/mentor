@@ -3,6 +3,7 @@ import {useEffect, useState, } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket"
 import WelcomePage from "./pages/Welcome.jsx"
 import TaskPage from "./pages/Task.jsx";
+import CodePage from "./pages/Code.jsx";
 
 function App() {
     const [activePage, setActivePage] = useState("welcome")
@@ -32,9 +33,9 @@ function App() {
 
     <>
 
-
         {activePage === "welcome" && <WelcomePage/>}
         {activePage === "tasks" && <TaskPage/>}
+        {activePage === "code" && <CodePage json={lastJsonMessage}/>}
     </>
   )
 }
