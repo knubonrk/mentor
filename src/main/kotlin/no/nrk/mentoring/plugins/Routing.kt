@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import no.nrk.mentoring.currentCode
 import no.nrk.mentoring.fetchCode
 import kotlin.time.Duration.Companion.seconds
 
@@ -68,6 +69,12 @@ fun Application.configureRouting() {
             currentPageFlow.value = page
             call.respondText("OK now value is "+currentPageFlow.value)
         }
+        post("/api/session/{session}/code/{example}") {
+            val example = call.request.pathVariables["example"].toString()
+            currentCode = example
+            call.respondText("Current code is now '$currentCode'")
+        }
+
 
     }
 }

@@ -1,7 +1,7 @@
 const TaskPage = () => {
     return (
         <>
-            This is the task page.
+            Nå kommer det snart en ny oppgave.
         </>
     )
 };

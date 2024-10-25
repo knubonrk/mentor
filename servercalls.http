@@ -1,2 +1,10 @@
 
+POST http://localhost:8080/api/session/TODO/page/welcome
+###
+POST http://localhost:8080/api/session/TODO/page/code
+###
 POST http://localhost:8080/api/session/TODO/page/tasks
+###
+POST http://localhost:8080/api/session/TODO/code/sort
+###
+POST http://localhost:8080/api/session/TODO/code/hello_world
