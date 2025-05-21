@@ -1,8 +1,16 @@
 import {useState, useEffect} from "react";
+import Avatar from '../components/Avatar';
+
+const avatarStyles = ["lorelei", "adventurer", "icons", "micah", "pixelArtNeutral", "thumbs"];
 
 function ProfileSetupPage({ profileSetCallback }) {
     const [suggestions, setSuggestions] = useState([]);
-    const [selected, setSelected] = useState({category1: '', category2: '', category3: ''});
+    const [selected, setSelected] = useState({
+        category1: '',
+        category2: '',
+        category3: ''
+    });
+    const [selectedAvatar, setSelectedAvatar] = useState('lorelei');
 
     useEffect(() => {
         async function fetchSuggestions() {
@@ -21,43 +29,77 @@ function ProfileSetupPage({ profileSetCallback }) {
     }, []);
 
     const handleSaveProfile = () => {
-        if (selected.category1 && selected.category2 && selected.category3) {
-            const nickname = `${selected.category1} ${selected.category2} ${selected.category3}`;
+        const {category1, category2, category3} = selected;
+        if (category1 && category2 && category3) {
+            const nickname = `${category1} ${category2} ${category3}`;
             localStorage.setItem('nickname', nickname);
+            localStorage.setItem('avatarStyle', selectedAvatar);
             profileSetCallback();
-
         }
-        // Redirect to welcome page or any other desired page
     };
 
+    const fullSeed = `${selected.category1} ${selected.category2} ${selected.category3}`;
+
     return (
-        <div>
+        <div style={{textAlign: 'center'}}>
             <h1>Mentor</h1>
-            <p>Welcome! Pick your nick name:</p>
-            <div style={{display: 'flex', justifyContent: 'space-around'}}>
+            <p>Welcome! Pick your nickname:</p>
+            <div style={{display: 'flex', justifyContent: 'center', gap: '2em'}}>
                 {suggestions.map((category, index) => (
-                    <div key={index} style={{margin: '10px'}}>
+                    <div key={index}>
                         {category.map((suggestion, idx) => (
-                            <div key={idx}>
+                            <div key={idx} style={{textAlign: 'left'}}>
                                 <input
                                     type="radio"
                                     name={`category${index + 1}`}
-                                    id={suggestion}
+                                    id={`${index}-${suggestion}`}
                                     value={suggestion}
                                     checked={selected[`category${index + 1}`] === suggestion}
-                                    onChange={(e) => setSelected({
-                                        ...selected,
-                                        [`category${index + 1}`]: e.target.value
-                                    })}
+                                    onChange={(e) =>
+                                        setSelected({
+                                            ...selected,
+                                            [`category${index + 1}`]: e.target.value,
+                                        })
+                                    }
                                 />
-                                <label
-                                    htmlFor={suggestion}>{suggestion.charAt(0).toUpperCase() + suggestion.slice(1)}</label>
+                                <label htmlFor={`${index}-${suggestion}`}>
+                                    {suggestion.charAt(0).toUpperCase() + suggestion.slice(1)}
+                                </label>
                             </div>
                         ))}
                     </div>
                 ))}
             </div>
-            <button onClick={handleSaveProfile}>Let's go</button>
+
+            <h3>Select an Avatar</h3>
+            <div style={{display: 'flex', justifyContent: 'center', gap: '2em', margin: '20px 0'}}>
+                {avatarStyles.map((style) => (
+                    <label key={style} style={{cursor: 'pointer', textAlign: 'center'}}>
+                        <input
+                            type="radio"
+                            name="avatarStyle"
+                            value={style}
+                            checked={selectedAvatar === style}
+                            onChange={() => setSelectedAvatar(style)}
+                            style={{display: 'none'}}
+                        />
+                        <div
+                            style={{
+                                border: selectedAvatar === style ? '2px solid #4caf50' : '2px solid transparent',
+                                borderRadius: '8px',
+                                padding: '4px'
+                            }}
+                        >
+                            <Avatar style={style} seed={fullSeed} size={72}/>
+                            <div style={{color: '#333', marginTop: '4px'}}>{style}</div>
+                        </div>
+                    </label>
+                ))}
+            </div>
+
+            <div style={{textAlign: "center"}}>
+                <button onClick={handleSaveProfile}>Let's go</button>
+            </div>
         </div>
     );
 }

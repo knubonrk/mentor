@@ -1,11 +1,12 @@
 import './App.css'
-import {useEffect, useState, } from "react";
+import {useEffect, useState,} from "react";
 import useWebSocket from "react-use-websocket";
 import {motion, AnimatePresence} from "framer-motion";
 import WelcomePage from "./pages/Welcome.jsx"
 import TaskPage from "./pages/Task.jsx";
 import CodePage from "./pages/Code.jsx";
 import ProfileSetupPage from "./pages/ProfilePage.jsx";
+import Header from "./components/Header.jsx";
 
 function App() {
     const [activePage, setActivePage] = useState("welcome")
@@ -18,7 +19,7 @@ function App() {
     }, []);
 
     const WS_URL = "ws://127.0.0.1:8080/stream"
-    const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(
+    const {sendJsonMessage, lastJsonMessage, readyState} = useWebSocket(
         WS_URL,
         {
             share: false,
@@ -28,14 +29,14 @@ function App() {
 
 
     useEffect(() => {
-        console.log("Connection state changed to "+readyState);
+        console.log("Connection state changed to " + readyState);
     }, [readyState])
 
     useEffect(() => {
         if (activePage === "profileSetup") {
             return;
         }
-        if(lastJsonMessage && lastJsonMessage["current_page"]) {
+        if (lastJsonMessage && lastJsonMessage["current_page"]) {
             setActivePage(lastJsonMessage["current_page"]);
         }
         console.log("Got a new message");
@@ -94,60 +95,62 @@ function App() {
         }
     }
 
-    return (
-      <div style={{perspective: 1000}}>
-          <AnimatePresence mode="wait">
-              {activePage === "welcome" && (
-                  <motion.div
-                      key="welcome"
-                      variants={pageVariants}
-                      initial="initial"
-                      animate="animate"
-                      exit="exit"
-                  >
-                      <WelcomePage/>
-                  </motion.div>
-              )}
+    return (<div style={{perspective: 1000, display: 'flex', flexDirection: 'column', minHeight: '100vh'}}>
+            <Header/>
+            <div className="app-container">
+                <AnimatePresence mode="wait">
+                    {activePage === "welcome" && (
+                        <motion.div
+                            key="welcome"
+                            variants={pageVariants}
+                            initial="initial"
+                            animate="animate"
+                            exit="exit"
+                        >
+                            <WelcomePage/>
+                        </motion.div>
+                    )}
 
-              {activePage === "tasks" && (
-                  <motion.div
-                      key="tasks"
-                      variants={pageVariants}
-                      initial="initial"
-                      animate="animate"
-                      exit="exit"
-                  >
-                      <TaskPage/>
-                  </motion.div>
-              )}
+                    {activePage === "tasks" && (
+                        <motion.div
+                            key="tasks"
+                            variants={pageVariants}
+                            initial="initial"
+                            animate="animate"
+                            exit="exit"
+                        >
+                            <TaskPage/>
+                        </motion.div>
+                    )}
 
-              {activePage === "code" && (
-                  <motion.div
-                      key="code"
-                      variants={pageVariants}
-                      initial="initial"
-                      animate="animate"
-                      exit="exit"
-                  >
-                      <CodePage json={lastJsonMessage}/>
-                  </motion.div>
-              )}
+                    {activePage === "code" && (
+                        <motion.div
+                            key="code"
+                            variants={pageVariants}
+                            initial="initial"
+                            animate="animate"
+                            exit="exit"
+                        >
+                            <CodePage json={lastJsonMessage}/>
+                        </motion.div>
+                    )}
 
-              {activePage === "profileSetup" && (
-                  <motion.div
-                      key="profileSetup"
-                      variants={pageVariants}
-                      initial="initial"
-                      animate="animate"
-                      exit="exit"
-                  >
-                      <ProfileSetupPage profileSetCallback={profileSetCallback}/>
-                  </motion.div>
-              )}
+                    {activePage === "profileSetup" && (
+                        <motion.div
+                            key="profileSetup"
+                            variants={pageVariants}
+                            initial="initial"
+                            animate="animate"
+                            exit="exit"
+                        >
+                            <ProfileSetupPage profileSetCallback={profileSetCallback}/>
+                        </motion.div>
+                    )}
 
-          </AnimatePresence>
-      </div>
-  )
+                </AnimatePresence>
+            </div>
+        </div>
+    )
 }
 
 export default App
