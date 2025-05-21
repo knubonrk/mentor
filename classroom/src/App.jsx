@@ -1,13 +1,21 @@
 import './App.css'
 import {useEffect, useState, } from "react";
-import useWebSocket, {ReadyState} from "react-use-websocket";
+import useWebSocket from "react-use-websocket";
 import {motion, AnimatePresence} from "framer-motion";
 import WelcomePage from "./pages/Welcome.jsx"
 import TaskPage from "./pages/Task.jsx";
 import CodePage from "./pages/Code.jsx";
+import ProfileSetupPage from "./pages/ProfilePage.jsx";
 
 function App() {
     const [activePage, setActivePage] = useState("welcome")
+
+    useEffect(() => {
+        const nickname = localStorage.getItem('nickname');
+        if (!nickname) {
+            setActivePage("profileSetup");
+        }
+    }, []);
 
     const WS_URL = "ws://127.0.0.1:8080/stream"
     const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(
@@ -18,11 +26,15 @@ function App() {
         },
     )
 
+
     useEffect(() => {
         console.log("Connection state changed to "+readyState);
     }, [readyState])
 
     useEffect(() => {
+        if (activePage === "profileSetup") {
+            return;
+        }
         if(lastJsonMessage && lastJsonMessage["current_page"]) {
             setActivePage(lastJsonMessage["current_page"]);
         }
@@ -74,7 +86,15 @@ function App() {
         },
     };
 
-  return (
+    const profileSetCallback = () => {
+        if (lastJsonMessage && lastJsonMessage["current_page"]) {
+            setActivePage(lastJsonMessage["current_page"]);
+        } else {
+            setActivePage("welcome")
+        }
+    }
+
+    return (
       <div style={{perspective: 1000}}>
           <AnimatePresence mode="wait">
               {activePage === "welcome" && (
@@ -112,6 +132,19 @@ function App() {
                       <CodePage json={lastJsonMessage}/>
                   </motion.div>
               )}
+
+              {activePage === "profileSetup" && (
+                  <motion.div
+                      key="profileSetup"
+                      variants={pageVariants}
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
+                  >
+                      <ProfileSetupPage profileSetCallback={profileSetCallback}/>
+                  </motion.div>
+              )}
+
           </AnimatePresence>
       </div>
   )

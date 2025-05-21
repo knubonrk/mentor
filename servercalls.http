@@ -8,3 +8,6 @@ POST http://localhost:8080/api/session/TODO/page/tasks
 POST http://localhost:8080/api/session/TODO/code/sort
 ###
 POST http://localhost:8080/api/session/TODO/code/hello_world
+
+###
+GET http://localhost:8080/api/profile/suggestions

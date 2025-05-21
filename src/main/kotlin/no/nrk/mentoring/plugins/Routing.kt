@@ -18,6 +18,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import no.nrk.mentoring.currentCode
 import no.nrk.mentoring.fetchCode
+import no.nrk.mentoring.profile.getProfileSuggestions
 import kotlin.time.Duration.Companion.seconds
 
 fun Application.configureRouting() {
@@ -75,6 +76,9 @@ fun Application.configureRouting() {
             call.respondText("Current code is now '$currentCode'")
         }
 
+        get("/api/profile/suggestions") {
+            call.respondText(Json.encodeToString(getProfileSuggestions()))
+        }
 
     }
 }

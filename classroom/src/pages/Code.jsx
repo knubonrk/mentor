@@ -4,13 +4,13 @@ import "highlight.js/styles/stackoverflow-light.css"
 const CodePage = ({json}) => {
     return (
         <>
-            <div class={"row"}>
-                <div class={"column code"}>
+            <div className={"row"}>
+                <div className={"column code"}>
                     <Highlight className='java'>
                         {json["CodeA"]}
                     </Highlight>
                 </div>
-                <div class="column code">
+                <div className="column code">
                     <Highlight className='java'>
                         {json["CodeB"]}
                     </Highlight>
