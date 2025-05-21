@@ -1,7 +1,7 @@
 const WelcomePage = () => {
     return (
         <>
-            Hei der! Velkommen til klasserommet!
+            Hi there! Welcome to the classroom!
         </>
     )
 };
