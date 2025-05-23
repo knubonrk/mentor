@@ -13,8 +13,9 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import no.nrk.mentoring.classes.configureClassesRouting
-import no.nrk.mentoring.classes.fetchCode
+import no.nrk.mentoring.classes.fetchCodeConfiguration
 import no.nrk.mentoring.teacher.configureTeacherRouting
+import java.util.UUID
 import kotlin.time.Duration.Companion.seconds
 
 fun Application.configureRouting() {
@@ -40,11 +41,14 @@ fun Application.configureRouting() {
             ignoreFiles { it.endsWith(".txt") }
         }
 
-        webSocket("/stream") { // WebSocket route
+        webSocket("/stream") {
+            val socketId = UUID.randomUUID().toString()
+            println("WebSocket connected: $socketId")
+
             val job = launch {
                 currentPageFlow.collect { page ->
                     if (page.startsWith("code")) {
-                        send(Text(Json.encodeToString(mapOf("current_page" to "code") + fetchCode())))
+                        send(Text(Json.encodeToString(mapOf("current_page" to "code") + fetchCodeConfiguration())))
                     } else {
                         send(Text(Json.encodeToString(mapOf("current_page" to page))))
                     }
@@ -55,7 +59,7 @@ fun Application.configureRouting() {
                 incoming.consumeAsFlow().collect { frame ->
                     if (frame is Text) {
                         val text = frame.readText()
-                        println("Received: $text")
+                        println("Received: $text for $socketId")
                     } else {
                         println("Got some frame type ${frame.frameType} ${frame}")
                     }

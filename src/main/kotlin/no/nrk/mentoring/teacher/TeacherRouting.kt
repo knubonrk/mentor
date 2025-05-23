@@ -10,6 +10,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import no.nrk.mentoring.classes.availableSources
 import no.nrk.mentoring.classes.currentCode
+import no.nrk.mentoring.classes.voteActive
 import no.nrk.mentoring.plugins.Config
 
 
@@ -25,7 +26,7 @@ fun Routing.configureTeacherRouting(currentPageFlow: MutableStateFlow<String>) {
         currentPageFlow.value = page
         call.respondText("OK now value is " + currentPageFlow.value)
     }
-    post("/api/session/code/{example}") {
+    post("/api/session/code/{example}/{vote}") {
         val session = call.request.cookies["teacher_session"]
         if (session == null || !sessionValid(session)) {
             call.respond(HttpStatusCode.Unauthorized)
@@ -33,8 +34,10 @@ fun Routing.configureTeacherRouting(currentPageFlow: MutableStateFlow<String>) {
         }
 
         val example = call.request.pathVariables["example"].toString()
+        val vote = call.request.pathVariables["vote"].toString()
         currentCode = example
-        currentPageFlow.value = "code-$example"
+        voteActive = vote == "true"
+        currentPageFlow.value = "code-$example-$voteActive"
         call.respondText("Current code is now '$currentCode'")
     }
     get("/api/config/material") {

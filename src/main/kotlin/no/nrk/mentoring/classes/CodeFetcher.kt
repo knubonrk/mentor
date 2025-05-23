@@ -3,11 +3,15 @@ package no.nrk.mentoring.classes
 import java.nio.charset.Charset
 
 var currentCode = "hello_world"
+var voteActive = false
 
-fun fetchCode(): Map<String, String> {
+
+fun fetchCodeConfiguration(): Map<String, String> {
     return mapOf(
         "CodeA" to loadResourceAsString("/code/$currentCode/CodeA.java"),
-        "CodeB" to loadResourceAsString("/code/$currentCode/CodeB.java")
+        "CodeB" to loadResourceAsString("/code/$currentCode/CodeB.java"),
+        "code" to currentCode,
+        "vote" to voteActive.toString(),
     )
 }
 

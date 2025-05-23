@@ -2,21 +2,14 @@ import './App.css'
 import {useEffect, useState,} from "react";
 import useWebSocket from "react-use-websocket";
 import {motion, AnimatePresence} from "framer-motion";
-import WelcomePage from "./pages/Welcome.jsx"
-import TaskPage from "./pages/Task.jsx";
-import CodePage from "./pages/Code.jsx";
+import WelcomePage from "./pages/WelcomePage.jsx"
+import TaskPage from "./pages/TaskPage.jsx";
+import CodePage from "./pages/CodePage.jsx";
 import ProfileSetupPage from "./pages/ProfilePage.jsx";
 import Header from "./components/Header.jsx";
 
 function App() {
     const [activePage, setActivePage] = useState("welcome")
-
-    useEffect(() => {
-        const nickname = localStorage.getItem('nickname');
-        if (!nickname) {
-            setActivePage("profileSetup");
-        }
-    }, []);
 
     const WS_URL = "ws://127.0.0.1:8080/stream"
     const {sendJsonMessage, lastJsonMessage, readyState} = useWebSocket(
@@ -26,6 +19,17 @@ function App() {
             shouldReconnect: () => true,
         },
     )
+
+    useEffect(() => {
+        const nickname = localStorage.getItem('nickname');
+        if (!nickname) {
+            setActivePage("profileSetup");
+        } else {
+            sendJsonMessage({nickname: nickname});
+        }
+
+    }, []);
+
 
 
     useEffect(() => {
@@ -88,6 +92,9 @@ function App() {
     };
 
     const profileSetCallback = () => {
+        const nickname = localStorage.getItem('nickname');
+        sendJsonMessage({nickname: nickname});
+
         if (lastJsonMessage && lastJsonMessage["current_page"]) {
             setActivePage(lastJsonMessage["current_page"]);
         } else {
@@ -131,7 +138,7 @@ function App() {
                             animate="animate"
                             exit="exit"
                         >
-                            <CodePage json={lastJsonMessage}/>
+                            <CodePage json={lastJsonMessage} sendJsonMessage={sendJsonMessage}/>
                         </motion.div>
                     )}
 
