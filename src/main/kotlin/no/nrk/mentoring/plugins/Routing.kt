@@ -9,6 +9,7 @@ import io.ktor.websocket.Frame.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import no.nrk.mentoring.classes.configureClassesRouting
@@ -42,8 +43,8 @@ fun Application.configureRouting() {
         webSocket("/stream") { // WebSocket route
             val job = launch {
                 currentPageFlow.collect { page ->
-                    if (page == "code") {
-                        send(Text(Json.encodeToString(mapOf("current_page" to page) + fetchCode())))
+                    if (page.startsWith("code")) {
+                        send(Text(Json.encodeToString(mapOf("current_page" to "code") + fetchCode())))
                     } else {
                         send(Text(Json.encodeToString(mapOf("current_page" to page))))
                     }
@@ -73,6 +74,5 @@ fun Application.configureRouting() {
 }
 
 
-
-
+@Serializable
 data class Config(val pages: List<String>, val code: List<String>)

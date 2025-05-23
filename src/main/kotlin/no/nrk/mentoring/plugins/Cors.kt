@@ -14,6 +14,7 @@ fun Application.installCORS() {
         allowMethod(HttpMethod.Post)
         allowHeader(HttpHeaders.Authorization)
         allowHost("localhost:5173")
+        allowHost("localhost:5174   ")
         allowSameOrigin= true
         allowCredentials = true
         allowNonSimpleContentTypes = true
