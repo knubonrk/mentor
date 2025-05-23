@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 const CodePage = ({ json, sendJsonMessage }) => {
     const handleVote = (choice) => {
-        sendJsonMessage({ type: "vote", vote: choice, code: json.code });
+        sendJsonMessage({ type: "vote", key: choice, data: json.code });
     };
 
     const showVoteButtons = json.vote === "true";

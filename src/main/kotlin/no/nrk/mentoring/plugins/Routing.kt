@@ -13,6 +13,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import no.nrk.mentoring.classes.configureClassesRouting
+import no.nrk.mentoring.classes.consumeMessage
 import no.nrk.mentoring.classes.fetchCodeConfiguration
 import no.nrk.mentoring.teacher.configureTeacherRouting
 import java.util.UUID
@@ -26,6 +27,7 @@ fun Application.configureRouting() {
         masking = false
     }
     val currentPageFlow = MutableStateFlow("welcome")
+    val teacherMessageFlow = MutableStateFlow("""{"action": "startup", "key":"hello", "value":"world"}""")
 
     routing {
         singlePageApplication {
@@ -39,6 +41,14 @@ fun Application.configureRouting() {
             defaultPage = "index.html"
 
             ignoreFiles { it.endsWith(".txt") }
+        }
+
+        webSocket("/streamteacher") {
+            val job = launch {
+                teacherMessageFlow.collect { message ->
+                    send(message)
+                }
+            }
         }
 
         webSocket("/stream") {
@@ -59,6 +69,10 @@ fun Application.configureRouting() {
                 incoming.consumeAsFlow().collect { frame ->
                     if (frame is Text) {
                         val text = frame.readText()
+
+                        val clientMessage = Json.decodeFromString<ClientMessage>(frame.readText())
+                        consumeMessage(socketId, clientMessage)
+
                         println("Received: $text for $socketId")
                     } else {
                         println("Got some frame type ${frame.frameType} ${frame}")
@@ -80,3 +94,7 @@ fun Application.configureRouting() {
 
 @Serializable
 data class Config(val pages: List<String>, val code: List<String>)
+
+
+@Serializable
+data class ClientMessage(val type: String, val key: String, val data: String)

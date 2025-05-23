@@ -25,7 +25,7 @@ function App() {
         if (!nickname) {
             setActivePage("profileSetup");
         } else {
-            sendJsonMessage({nickname: nickname});
+            sendJsonMessage({ type: "config", key: "nick", data: nickname });
         }
 
     }, []);
@@ -93,7 +93,7 @@ function App() {
 
     const profileSetCallback = () => {
         const nickname = localStorage.getItem('nickname');
-        sendJsonMessage({nickname: nickname});
+        sendJsonMessage({ type: "config", key: "nick", data: nickname });
 
         if (lastJsonMessage && lastJsonMessage["current_page"]) {
             setActivePage(lastJsonMessage["current_page"]);
