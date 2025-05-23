@@ -43,7 +43,7 @@ function ProfileSetupPage({ profileSetCallback }) {
     return (
         <div style={{textAlign: 'center'}}>
             <h1>Mentor</h1>
-            <p>Welcome! Pick your nickname:</p>
+            <p>Welcome! Pick your nickname by choosing one from each column:</p>
             <div style={{display: 'flex', justifyContent: 'center', gap: '2em'}}>
                 {suggestions.map((category, index) => (
                     <div key={index}>
@@ -71,7 +71,7 @@ function ProfileSetupPage({ profileSetCallback }) {
                 ))}
             </div>
 
-            <h3>Select an Avatar</h3>
+            <h3>Then select an Avatar...</h3>
             <div style={{display: 'flex', justifyContent: 'center', gap: '2em', margin: '20px 0'}}>
                 {avatarStyles.map((style) => (
                     <label key={style} style={{cursor: 'pointer', textAlign: 'center'}}>
@@ -91,7 +91,7 @@ function ProfileSetupPage({ profileSetCallback }) {
                             }}
                         >
                             <Avatar style={style} seed={fullSeed} size={72}/>
-                            <div style={{color: '#333', marginTop: '4px'}}>{style}</div>
+                            <div style={{color: '#999', marginTop: '4px'}}>{style}</div>
                         </div>
                     </label>
                 ))}

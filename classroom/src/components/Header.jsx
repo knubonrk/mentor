@@ -25,7 +25,14 @@ function Header() {
                 color: 'white'
             }}>
                 <h3 style={{ margin: 0 }}>{nickname}</h3>
-                <Avatar seed={nickname} style={avatarStyle} size={48} />
+                <a
+                    href="https://www.dicebear.com/licenses/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{textDecoration: 'none', color: 'inherit', display: 'inline-block'}}
+                >
+                    <Avatar seed={nickname} style={avatarStyle} size={48}/>
+                </a>
             </div>
         </header>
     );

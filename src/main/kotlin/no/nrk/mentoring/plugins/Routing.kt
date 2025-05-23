@@ -1,24 +1,19 @@
 package no.nrk.mentoring.plugins
 
-import io.ktor.server.application.Application
-import io.ktor.server.application.install
-import io.ktor.server.http.content.ignoreFiles
-import io.ktor.server.http.content.singlePageApplication
-import io.ktor.server.response.respondText
+import io.ktor.server.application.*
+import io.ktor.server.http.content.*
 import io.ktor.server.routing.*
-import io.ktor.server.websocket.WebSockets
-import io.ktor.server.websocket.pingPeriod
-import io.ktor.server.websocket.timeout
-import io.ktor.server.websocket.webSocket
-import io.ktor.websocket.Frame.Text
-import io.ktor.websocket.readText
-import kotlinx.coroutines.flow.*
+import io.ktor.server.websocket.*
+import io.ktor.websocket.*
+import io.ktor.websocket.Frame.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import no.nrk.mentoring.currentCode
-import no.nrk.mentoring.fetchCode
-import no.nrk.mentoring.profile.getProfileSuggestions
+import no.nrk.mentoring.classes.configureClassesRouting
+import no.nrk.mentoring.classes.fetchCode
+import no.nrk.mentoring.teacher.configureTeacherRouting
 import kotlin.time.Duration.Companion.seconds
 
 fun Application.configureRouting() {
@@ -33,6 +28,12 @@ fun Application.configureRouting() {
     routing {
         singlePageApplication {
             filesPath = "classroom/dist"
+            defaultPage = "index.html"
+
+            ignoreFiles { it.endsWith(".txt") }
+        }
+        singlePageApplication {
+            filesPath = "teacher/dist"
             defaultPage = "index.html"
 
             ignoreFiles { it.endsWith(".txt") }
@@ -65,20 +66,13 @@ fun Application.configureRouting() {
             }
         }
 
-        post("/api/session/{session}/page/{page}") {
-            val page = call.request.pathVariables["page"].toString()
-            currentPageFlow.value = page
-            call.respondText("OK now value is "+currentPageFlow.value)
-        }
-        post("/api/session/{session}/code/{example}") {
-            val example = call.request.pathVariables["example"].toString()
-            currentCode = example
-            call.respondText("Current code is now '$currentCode'")
-        }
-
-        get("/api/profile/suggestions") {
-            call.respondText(Json.encodeToString(getProfileSuggestions()))
-        }
+        configureClassesRouting()
+        configureTeacherRouting(currentPageFlow)
 
     }
 }
+
+
+
+
+data class Config(val pages: List<String>, val code: List<String>)

@@ -1,4 +1,4 @@
-package no.nrk.mentoring
+package no.nrk.mentoring.classes
 
 import java.nio.charset.Charset
 
@@ -15,4 +15,7 @@ fun loadResourceAsString(filename: String, charset: Charset = Charsets.UTF_8): S
     val resource = { }::class.java.getResource(filename)
         ?: throw RuntimeException("Could not load file or content missing from $filename")
     return resource.readText(charset)
+}
+fun availableSources():List<String> {
+    return listOf("hello_world", "sort")
 }

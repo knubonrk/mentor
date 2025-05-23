@@ -26,17 +26,10 @@ function Avatar({ seed, style = 'lorelei', size = 64 }) {
     }, [seed, style, size]);
 
     return (
-        <a
-            href="https://www.dicebear.com/licenses/"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{textDecoration: 'none', color: 'inherit', display: 'inline-block'}}
-        >
             <div
                 style={{width: size, height: size}}
                 dangerouslySetInnerHTML={{__html: svg}}
             />
-        </a>
     );
 }
 

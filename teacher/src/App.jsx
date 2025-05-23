@@ -1,35 +1,46 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import {useLocation} from 'react-router-dom';
+import {useEffect} from "react";
+import { v4 as uuidv4 } from 'uuid';
 
 function App() {
-  const [count, setCount] = useState(0)
+    const location = useLocation();
+    const path = location.pathname.slice(1);
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    useEffect(() => {
+        let secret = localStorage.getItem('sessionSecret');
+
+        if (!secret) {
+            const newSecret = uuidv4();
+
+            let formData = new FormData();
+            formData.append('sessionSecret', newSecret);
+
+            fetch('http://localhost:8080/api/teacher/reserve_me_as_admin', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data === true) {
+                        localStorage.setItem('sessionSecret', newSecret);
+                    } else {
+                        alert("Omstart baktjeneren for å få sesjonen.");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("Noe gikk galt.");
+                });
+        }
+    }, []); // Empty dependency array to run only once on mount
+
+
+    return (
+        <div>
+            <h1>Teachers paradise - classroom {path}</h1>
+        </div>
+    );
 }
 
 export default App
