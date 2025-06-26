@@ -1,3 +1,37 @@
 ul {
     list-style-type: none;
 }
+
+.page-selection-container {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    padding: 1rem;
+}
+
+.left-column {
+    flex: 1;
+    text-align: left;
+}
+
+.right-column {
+    flex: 1;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+}
+
+.vote-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.vote-table th,
+.vote-table td {
+    border: 1px solid #ddd;
+    padding: 0.5rem 1rem;
+    text-align: left;
+}
+
+.vote-table th {
+}

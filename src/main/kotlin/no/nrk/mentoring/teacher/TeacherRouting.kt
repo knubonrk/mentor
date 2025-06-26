@@ -9,7 +9,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import no.nrk.mentoring.classes.availableSources
 import no.nrk.mentoring.classes.currentCode
-import no.nrk.mentoring.classes.voteActive
+import no.nrk.mentoring.classes.voteState
 import no.nrk.mentoring.plugins.Config
 import no.nrk.mentoring.plugins.participantFlow
 
@@ -35,8 +35,8 @@ fun Routing.configureTeacherRouting() {
         val example = call.request.pathVariables["example"].toString()
         val vote = call.request.pathVariables["vote"].toString()
         currentCode = example
-        voteActive = vote == "true"
-        participantFlow.value = "code-$example-$voteActive"
+        voteState = vote
+        participantFlow.value = "code-$example-$vote"
         call.respondText("Current code is now '$currentCode'")
     }
     get("/api/config/material") {

@@ -75,7 +75,7 @@ fun Application.configureRouting() {
             val job = launch {
                 participantFlow.collect { page ->
                     if (page.startsWith("code")) {
-                        send(Text(Json.encodeToString(mapOf("current_page" to "code") + fetchCodeConfiguration())))
+                        send(Text(Json.encodeToString(fetchCodeConfiguration())))
                     } else {
                         send(Text(Json.encodeToString(mapOf("current_page" to page))))
                     }

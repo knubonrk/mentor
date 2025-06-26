@@ -12,7 +12,7 @@ fun registerParticipant(sessionId: String, nick: String) {
 fun consumeMessage(sessionId: String, message: ClientMessage) {
     when {
         message.type == "config" && message.key == "nick" -> registerParticipant(sessionId, message.data)
-        message.type == "vote" -> registerVote(sessionId, message.key, message.data)
+        message.type == "vote" -> registerVote(sessionId, message.data, message.key)
     }
 
 }

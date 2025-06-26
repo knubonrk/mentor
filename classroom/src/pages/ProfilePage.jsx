@@ -3,7 +3,6 @@ import Avatar from '../components/Avatar';
 
 const avatarStyles = ["lorelei", "adventurer", "icons", "micah", "pixelArtNeutral", "thumbs"];
 
-// eslint-disable-next-line react/prop-types
 function ProfileSetupPage({ profileSetCallback }) {
     const [suggestions, setSuggestions] = useState([]);
     const [selected, setSelected] = useState({

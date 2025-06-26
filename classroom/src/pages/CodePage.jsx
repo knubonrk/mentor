@@ -2,7 +2,6 @@ import Highlight from 'react-highlight';
 import {useState} from "react";
 import "highlight.js/styles/stackoverflow-light.css";
 import './CodePage.css';
-import PropTypes from 'prop-types';
 
 const CodePage = ({ json, sendJsonMessage }) => {
     const [votedText, setVotedText] = useState(null);
@@ -16,7 +15,7 @@ const CodePage = ({ json, sendJsonMessage }) => {
 
     };
 
-    const showVoteButtons = json.vote === "true";
+    const showVoteButtons = json.voteState === "vote";
 
     return (
         <>
@@ -64,12 +63,3 @@ const CodePage = ({ json, sendJsonMessage }) => {
 
 export default CodePage;
 
-CodePage.propTypes = {
-    json: PropTypes.shape({
-        CodeA: PropTypes.string.isRequired,
-        CodeB: PropTypes.string.isRequired,
-        code: PropTypes.string.isRequired,
-        vote: PropTypes.bool
-    }).isRequired,
-    sendJsonMessage: PropTypes.func.isRequired
-};

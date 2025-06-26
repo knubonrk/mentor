@@ -16,15 +16,19 @@ fun registerVote(sessionId: String, code: String, choice: String) {
     postVoteSummary(code)
 }
 
+fun getVoteSummary(code: String): List<Summary> = votes.filter { it.key.code == code }.entries.groupBy {
+    it.value
+}.map { (key, value) -> Summary(key = key, value = value.count()) }
+
+
 fun postVoteSummary(code: String) {
 
     val summary =
-        votes.filter { it.key.code == code }.entries.groupBy {
-            it.value
-        }.map { (key, value) -> Summary(key = key, value = value.count()) }
+        getVoteSummary(code)
 
     teacherMessageFlow.value = Json.encodeToString(ActionWrapper(summary))
 }
+
 
 @Serializable
 data class ActionWrapper(
