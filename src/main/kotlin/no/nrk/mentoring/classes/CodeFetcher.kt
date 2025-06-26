@@ -13,7 +13,7 @@ fun fetchCodeConfiguration(): CodeConfiguration {
         codeB = loadResourceAsString("/code/$currentCode/CodeB.java"),
         code = currentCode,
         voteState = voteState,
-        voteResults = if (voteState == "results") getVoteSummary(currentCode) else emptyList(),
+        voteResults = if (voteState == "results") getVoteSummary(currentCode).associate { it.key to it.value } else emptyMap(),
         currentPage = "code"
     )
 }
@@ -35,5 +35,5 @@ data class CodeConfiguration(
     val codeA: String,
     @SerialName("CodeB")
     val codeB: String,
-    val code: String, val voteState: String, val voteResults: List<Summary>?
+    val code: String, val voteState: String, val voteResults: Map<String, Int>?
 )
