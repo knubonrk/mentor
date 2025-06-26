@@ -19,6 +19,10 @@ import no.nrk.mentoring.teacher.configureTeacherRouting
 import java.util.UUID
 import kotlin.time.Duration.Companion.seconds
 
+val participantFlow = MutableStateFlow("welcome")
+val teacherMessageFlow = MutableStateFlow("""{"action": "startup", "key":"hello", "value":"world"}""")
+
+
 fun Application.configureRouting() {
     install(WebSockets) {
         pingPeriod = 60.seconds
@@ -26,8 +30,6 @@ fun Application.configureRouting() {
         maxFrameSize = Long.MAX_VALUE
         masking = false
     }
-    val currentPageFlow = MutableStateFlow("welcome")
-    val teacherMessageFlow = MutableStateFlow("""{"action": "startup", "key":"hello", "value":"world"}""")
 
     routing {
         singlePageApplication {
@@ -49,6 +51,21 @@ fun Application.configureRouting() {
                     send(message)
                 }
             }
+            runCatching {
+                incoming.consumeAsFlow().collect { frame ->
+                    if (frame is Text) {
+                        val text = frame.readText()
+
+                        println("Received: $text for")
+                    } else {
+                        println("Got some frame type ${frame.frameType} ${frame}")
+                    }
+                }
+            }.onFailure { exception ->
+                println("WebSocket exception: ${exception.localizedMessage}")
+            }.also {
+                job.cancel()
+            }
         }
 
         webSocket("/stream") {
@@ -56,7 +73,7 @@ fun Application.configureRouting() {
             println("WebSocket connected: $socketId")
 
             val job = launch {
-                currentPageFlow.collect { page ->
+                participantFlow.collect { page ->
                     if (page.startsWith("code")) {
                         send(Text(Json.encodeToString(mapOf("current_page" to "code") + fetchCodeConfiguration())))
                     } else {
@@ -86,7 +103,7 @@ fun Application.configureRouting() {
         }
 
         configureClassesRouting()
-        configureTeacherRouting(currentPageFlow)
+        configureTeacherRouting()
 
     }
 }

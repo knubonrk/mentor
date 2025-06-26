@@ -14,9 +14,11 @@
 }
 
 .vote-button-wrapper {
+    position: relative;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    white-space: nowrap;
+    margin-left: 1rem;
 }
 
 .vote-button {
@@ -32,4 +34,58 @@
 
 .vote-button:hover {
     background-color: #005fa3;
+}
+
+.voted-emoji-heart {
+    position: absolute;
+    top: -30px;
+    left: -2px;
+    width: 2.5rem;
+    height: 2.5rem;
+    pointer-events: none;
+    animation: emojiFloat 1s ease-out forwards;
+    opacity: 0;
+}
+
+.voted-heart {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    line-height: 2.5rem;
+    font-size: 2rem;
+    transform: scale(2);
+}
+.voted-thumbs {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top:-5px;
+    text-align: center;
+    line-height: 2.5rem;
+    font-size: 2rem;
+    transform: scale(1);
+}
+
+.voted-thumbs {
+    font-size: 1.2rem;
+    color: black; /* Can adjust for contrast */
+}
+
+@keyframes emojiFloat {
+    0% {
+        transform: translateY(0) scale(0.9);
+        opacity: 0;
+    }
+    30% {
+        opacity: 1;
+    }
+    60% {
+        transform: translateY(-10px) scale(1.2);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-30px) scale(1);
+        opacity: 0;
+    }
 }

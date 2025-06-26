@@ -5,16 +5,15 @@ import io.ktor.server.plugins.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import no.nrk.mentoring.classes.availableSources
 import no.nrk.mentoring.classes.currentCode
 import no.nrk.mentoring.classes.voteActive
 import no.nrk.mentoring.plugins.Config
+import no.nrk.mentoring.plugins.participantFlow
 
-
-fun Routing.configureTeacherRouting(currentPageFlow: MutableStateFlow<String>) {
+fun Routing.configureTeacherRouting() {
     post("/api/session/page/{page}") {
         val session = call.request.cookies["teacher_session"]
         if (session == null || !sessionValid(session)) {
@@ -23,8 +22,8 @@ fun Routing.configureTeacherRouting(currentPageFlow: MutableStateFlow<String>) {
         }
 
         val page = call.request.pathVariables["page"].toString()
-        currentPageFlow.value = page
-        call.respondText("OK now value is " + currentPageFlow.value)
+        participantFlow.value = page
+        call.respondText("OK now value is " + participantFlow.value)
     }
     post("/api/session/code/{example}/{vote}") {
         val session = call.request.cookies["teacher_session"]
@@ -37,7 +36,7 @@ fun Routing.configureTeacherRouting(currentPageFlow: MutableStateFlow<String>) {
         val vote = call.request.pathVariables["vote"].toString()
         currentCode = example
         voteActive = vote == "true"
-        currentPageFlow.value = "code-$example-$voteActive"
+        participantFlow.value = "code-$example-$voteActive"
         call.respondText("Current code is now '$currentCode'")
     }
     get("/api/config/material") {

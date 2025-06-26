@@ -3,28 +3,10 @@ package no.nrk.mentoring.classes
 import no.nrk.mentoring.plugins.ClientMessage
 import java.util.Collections
 
-private val participanNames = Collections.synchronizedMap(mutableMapOf<String, String>())
-
-private val votes = Collections.synchronizedMap(mutableMapOf<Vote, String>())
+private val participantsNames = Collections.synchronizedMap(mutableMapOf<String, String>())
 
 fun registerParticipant(sessionId: String, nick: String) {
-    participanNames[sessionId] = nick
-}
-
-fun registerVote(sessionId: String, code: String, choice: String) {
-    votes[Vote(sessionId, code)] = choice
-
-    postVoteSummary(code)
-}
-
-fun postVoteSummary(code: String) {
-
-    val summary =
-        votes.filter { it.key.code == code }.entries.groupBy {
-            it.value
-        }.map { (key, value) -> key to value.count() }.toMap()
-
-    //TODO must send this to the websocket for Teacher.
+    participantsNames[sessionId] = nick
 }
 
 fun consumeMessage(sessionId: String, message: ClientMessage) {

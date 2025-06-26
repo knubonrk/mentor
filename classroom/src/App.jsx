@@ -1,5 +1,5 @@
 import './App.css'
-import {useEffect, useState,} from "react";
+import {useEffect, useState} from "react";
 import useWebSocket from "react-use-websocket";
 import {motion, AnimatePresence} from "framer-motion";
 import WelcomePage from "./pages/WelcomePage.jsx"

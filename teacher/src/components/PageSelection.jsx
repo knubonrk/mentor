@@ -87,6 +87,10 @@ function PageSelection() {
         </div>
 
 
+        <div>
+
+        </div>
+
         <input type={"button"} onClick={handleChangePage} value={"Change active page"}/>
 
     </div>

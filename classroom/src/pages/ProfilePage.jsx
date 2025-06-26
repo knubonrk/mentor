@@ -3,6 +3,7 @@ import Avatar from '../components/Avatar';
 
 const avatarStyles = ["lorelei", "adventurer", "icons", "micah", "pixelArtNeutral", "thumbs"];
 
+// eslint-disable-next-line react/prop-types
 function ProfileSetupPage({ profileSetCallback }) {
     const [suggestions, setSuggestions] = useState([]);
     const [selected, setSelected] = useState({
@@ -98,7 +99,7 @@ function ProfileSetupPage({ profileSetCallback }) {
             </div>
 
             <div style={{textAlign: "center"}}>
-                <button onClick={handleSaveProfile}>Let's go</button>
+                <button onClick={handleSaveProfile}>Let&#39;s go</button>
             </div>
         </div>
     );
