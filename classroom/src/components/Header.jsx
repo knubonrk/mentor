@@ -6,7 +6,9 @@ function Header() {
     const [avatarStyle, setAvatarStyle] = useState('lorelei');
 
     useEffect(() => {
-        setNickname(localStorage.getItem('nickname') || 'Guest');
+        const urlParams = new URLSearchParams(window.location.search);
+
+        setNickname(localStorage.getItem('nickname') || urlParams.get('presenter') === 'true' ? 'Presenter' : 'Guest');
         setAvatarStyle(localStorage.getItem('avatarStyle') || 'lorelei');
     }, [localStorage.getItem("nickname"),  localStorage.getItem('avatarStyle')]);
 

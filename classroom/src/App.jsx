@@ -21,7 +21,11 @@ function App() {
     )
 
     useEffect(() => {
-        const nickname = localStorage.getItem('nickname');
+        const urlParams = new URLSearchParams(window.location.search);
+        const isPresenter = urlParams.get('presenter') === 'true';
+
+        const nickname = isPresenter ? "Presenter" : localStorage.getItem('nickname');
+
         if (!nickname) {
             setActivePage("profileSetup");
         } else {
@@ -29,7 +33,6 @@ function App() {
         }
 
     }, []);
-
 
 
     useEffect(() => {
