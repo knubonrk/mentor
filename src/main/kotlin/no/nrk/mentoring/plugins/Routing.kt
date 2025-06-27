@@ -32,17 +32,21 @@ fun Application.configureRouting() {
     }
 
     routing {
-        singlePageApplication {
-            filesPath = "classroom/dist"
-            defaultPage = "index.html"
+        route("/classroom") {
+            singlePageApplication {
+                filesPath = "classroom/dist"
+                defaultPage = "index.html"
 
-            ignoreFiles { it.endsWith(".txt") }
+                ignoreFiles { it.endsWith(".txt") }
+            }
         }
-        singlePageApplication {
-            filesPath = "teacher/dist"
-            defaultPage = "index.html"
+        route("/teacher") {
+            singlePageApplication {
+                filesPath = "teacher/dist"
+                defaultPage = "index.html"
 
-            ignoreFiles { it.endsWith(".txt") }
+                ignoreFiles { it.endsWith(".txt") }
+            }
         }
 
         webSocket("/streamteacher") {
