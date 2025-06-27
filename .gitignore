@@ -20,4 +20,7 @@ gradle-app.setting
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
 
+studentsrepos/**
+!studentsrepos/README
+
 node_modules

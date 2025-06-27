@@ -1,0 +1,2 @@
+Here all the repositories for students should end up. They should be named by the uuid the server socket get. Or maybe
+preferably the client can create its own file name stored in local storage.
